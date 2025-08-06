@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .navbar-transition {
+    transition: all 0.3s ease-in-out;
+  }
+
+  .menu-item {
+    @apply relative font-semibold uppercase tracking-wide cursor-pointer;
+  }
+
+  .menu-item::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-white transition-all duration-300 ease-in-out;
+  }
+
+  .menu-item:hover::after {
+    @apply w-full;
+  }
+
+  .mobile-menu-item {
+    @apply block w-full text-left py-3 px-4 font-semibold uppercase tracking-wide hover:bg-white/10 transition-colors duration-200;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+} 
