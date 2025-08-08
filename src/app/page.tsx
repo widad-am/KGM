@@ -1,6 +1,11 @@
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
 import ExploreLineup from '@/components/ExploreLineup';
+import BrandSection from '@/components/BrandSection';
+import InsideKGM from '@/components/InsideKGM';
+import Newsroom from '@/components/Newsroom';
+import KGMBanner from '@/components/KGMBanner';
+import QuickAccess from '@/components/QuickAccess';
 
 export default function Home() {
   return (
@@ -13,6 +18,21 @@ export default function Home() {
 
       {/* Explore KGM Lineup (dark mode section) */}
       <ExploreLineup />
+
+      {/* Brand section */}
+      <BrandSection />
+
+      {/* Inside KGM section */}
+      <InsideKGM />
+
+      {/* Newsroom section */}
+      <Newsroom />
+
+      {/* KGM Banner section */}
+      <KGMBanner />
+
+      {/* Quick Access section */}
+      <QuickAccess />
 
       {/* Existing demo sections can remain or be removed if not needed */}
 
