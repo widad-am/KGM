@@ -1,12 +1,20 @@
 import Layout from '@/components/Layout';
 import HeroSection from '@/components/HeroSection';
+import ExploreLineup from '@/components/ExploreLineup';
 
 export default function Home() {
   return (
     <Layout>
-      <HeroSection />
-      
-      {/* Demo Sections */}
+      {/* Hero with bottom gradient overlay to transition into dark section */}
+      <div className="relative">
+        <HeroSection />
+        <div className="pointer-events-none absolute inset-x-0 -bottom-px h-24 bg-gradient-to-b from-transparent to-[#0b0d16]" />
+      </div>
+
+      {/* Explore KGM Lineup (dark mode section) */}
+      <ExploreLineup />
+
+      {/* Existing demo sections can remain or be removed if not needed */}
 
       {/* Demo Sections */}
       <section id="models" className="py-20 bg-white">

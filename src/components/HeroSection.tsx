@@ -1,12 +1,52 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, Play, ArrowRight, VolumeX, X, Grid } from 'lucide-react';
+import { ChevronDown, Play, ArrowRight, VolumeX, Volume2, X, Grid } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const HeroSection = () => {
   const [isQuickMenuOpen, setIsQuickMenuOpen] = useState(false);
+  const [isSoundPlaying, setIsSoundPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Lazily create the audio element so it doesn't block initial render
+    const audio = new Audio();
+    // Try common audio formats – the first that exists will play
+    // Place your file at public/media/KGM_main_sound_400k-Cd1qYekB.(mp3|ogg|webm)
+    const sources = [
+      '/media/KGM_main_sound_400k-Cd1qYekB.mp3',
+      '/media/KGM_main_sound_400k-Cd1qYekB.ogg',
+      '/media/KGM_main_sound_400k-Cd1qYekB.webm',
+    ];
+    // Pick the first one; browser will 404 if not found, which is fine
+    audio.src = sources[0];
+    audio.preload = 'auto';
+    audioRef.current = audio;
+
+    // Cleanup on unmount
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
+
+  const toggleSound = async () => {
+    if (!audioRef.current) return;
+    try {
+      if (isSoundPlaying) {
+        audioRef.current.pause();
+        setIsSoundPlaying(false);
+      } else {
+        await audioRef.current.play();
+        setIsSoundPlaying(true);
+      }
+    } catch (err) {
+      // Autoplay restrictions or missing file – simply ignore for now
+      console.error('Audio playback failed:', err);
+    }
+  };
 
   const quickMenuItems = [
     {
@@ -104,10 +144,9 @@ const HeroSection = () => {
               MUSSO EV
             </h2>
             
-            {/* Main Tagline */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
-              NEW TOOLS.<br />
-              NEW LIFE.
+            {/* Main Tagline (smaller than before) */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 leading-tight">
+              NEW TOOLS. NEW LIFE.
             </h1>
             
             {/* Learn More Link */}
@@ -121,17 +160,24 @@ const HeroSection = () => {
           </motion.div>
         </div>
 
-        {/* Sound Indicator - positioned at bottom left */}
+        {/* Sound Control - bottom left (click to toggle) */}
         <div className="absolute bottom-8 left-8 z-20">
-          <motion.div
+          <motion.button
+            onClick={toggleSound}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1 }}
-            className="flex items-center space-x-2 text-white/80"
+            transition={{ delay: 0.6 }}
+            className="flex items-center space-x-2 text-white/90 hover:text-white transition-colors"
+            aria-pressed={isSoundPlaying}
+            aria-label="Toggle sound"
           >
-            <VolumeX className="w-5 h-5" />
+            {isSoundPlaying ? (
+              <Volume2 className="w-5 h-5" />
+            ) : (
+              <VolumeX className="w-5 h-5" />
+            )}
             <span className="text-sm font-medium">SOUND</span>
-          </motion.div>
+          </motion.button>
         </div>
 
         {/* Quick Menu Button - positioned at bottom right */}
@@ -205,7 +251,7 @@ const HeroSection = () => {
                   </div>
                 </div>
               </div>
-            </motion.div> 
+            </motion.div>
           )}
         </AnimatePresence>
 
